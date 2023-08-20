@@ -23,6 +23,8 @@ interface ShoppingListContextType {
   addToFavorites: (product: Product) => void;
   removeFromFavorites: (product: Product) => void;
   clearShoppingList: () => void;
+  // objectArray: [{count: number, product: Product}]
+  // updateCount:()=> void;
 }
 
 const ShoppingListContext = createContext<ShoppingListContextType | undefined>(undefined);
@@ -30,10 +32,30 @@ const ShoppingListContext = createContext<ShoppingListContextType | undefined>(u
 interface ShoppingListProviderProps {
   children: ReactNode;
 }
+// interface ObjectWithCount {
+//   count: number;
+//   product: Product;
+// }
 
 export const ShoppingListProvider: React.FC<ShoppingListProviderProps> = ({ children }) => {
   const [shoppingList, setShoppingList] = useState<Product[]>([]);
   const [favorites, setFavorites] = useState<Product[]>([]);
+  // const [objectArray, setObjectArray] = useState<ObjectWithCount[]>([
+  //   { count: 0, product: {
+  //     id: 0,
+  //     title: "",
+  //     description: "",
+  //     price: 0,
+  //     discountPercentage: 0,
+  //     rating: 0,
+  //     stock: 0,
+  //     brand: "",
+  //     category: "",
+  //     thumbnail: "",
+  //     images: [""]
+  //   }},
+  //   // You can add more objects to the initial array if needed
+  // ]);
 
   const addToShoppingList = (product: Product):void => {
     //if its already in array then do nothing
@@ -60,6 +82,13 @@ export const ShoppingListProvider: React.FC<ShoppingListProviderProps> = ({ chil
     setShoppingList([]);
   };
 
+  // const updateCount = (index:number) => {
+  //   setObjectArray(prevArray => [
+  //     { ...prevArray[index], count: prevArray[index].count + 1 },
+  //     ...prevArray.slice(1) // Keep the rest of the objects unchanged
+  //   ]);
+  // };
+
   const contextValue: ShoppingListContextType = {
     shoppingList,
     favorites,
@@ -68,6 +97,10 @@ export const ShoppingListProvider: React.FC<ShoppingListProviderProps> = ({ chil
     addToFavorites,
     removeFromFavorites,
     clearShoppingList,
+    // // @ts-ignore: Unreachable code error
+    //  objectArray,
+    //  // @ts-ignore: Unreachable code error
+    // updateCount
   };
 
   return (

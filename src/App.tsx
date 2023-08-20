@@ -1,4 +1,3 @@
-import './App.css'
 // import React, { createContext, useContext, useState } from 'react';
 import { styled } from "styled-components";
 import NewProducts from './components/NewProducts'

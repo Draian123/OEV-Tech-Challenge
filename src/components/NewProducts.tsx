@@ -18,7 +18,7 @@ type Product = {
   brand: string,
   category: string,
   thumbnail: string,
-  images: string[]
+  images: string[],
   }
 
 const Container = styled.div`

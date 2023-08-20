@@ -185,11 +185,14 @@ export default function MyProducts() {
 
     const {favorites, shoppingList, clearShoppingList, removeFromShoppingList, addToFavorites, removeFromFavorites } = useShoppingList();
     
+
+
     const initialCounts:number[] = shoppingList?.map(() => 0); // Initial count for each object
-    
+  //could be solved with context [{ count: Number, product: Product }]
     const [counts, setCounts] = useState<number[]>(initialCounts);
     const [subTotal, setSubtotal] = useState<number>(0)
     const [total, setTotal] = useState<number>(0)
+
 
 
     const handleIncrement = (index: number) => {
@@ -253,11 +256,19 @@ export default function MyProducts() {
     useEffect(() => {
       setCounts(initialCounts)
     }, [shoppingList]);
-
+    
     useEffect(() => {
       calculateSubtotal()
       calculateTotal()
     }, [counts, subTotal]);
+
+    if(shoppingList.length === 0){
+      return     <Container>
+      <TopContainer>
+          <h5>No Items in the shopping list</h5>
+      </TopContainer>
+      </Container>
+    }
 
 
   return (

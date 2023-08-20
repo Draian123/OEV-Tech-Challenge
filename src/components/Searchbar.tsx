@@ -1,5 +1,13 @@
-import { useMemo, useRef, useState, useEffect } from "react"
+import {
+  //  useMemo,
+  //  useRef,
+   useState,
+   useEffect } from "react"
 import { styled } from "styled-components";
+import axios from "axios";
+import ProductCard from "./ProductCard";
+import { useShoppingList } from "./ShoppingListContext";
+
 
 
 
@@ -36,34 +44,67 @@ const AddButton = styled.button`
     }
 `;
 
-interface SearchResult {
-    id: number;
-    name: string;
+const SuggestionList = styled.div`
+    list-style: none;
+    padding: 0;
+    margin: 200px 0 0 0 ;
+    border: 1px solid #ccc;
+    border-top: none;
+    width: 580px;
+    height: 500px;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    background-color: white;
+`;
+
+const SuggestionListLi = styled.div`
+    padding: 8px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+    &:last-child{
+      border-bottom: none;
+    }
+`;
+
+interface Product {
+  id: number,
+  title: string,
+  description: string,
+  price: number,
+  discountPercentage: number,
+  rating: number,
+  stock: number,
+  brand: string,
+  category: string,
+  thumbnail: string,
+  images: string[]
   }
   
   
   const SearchBar: React.FC = () => {
     const [inputValue, setInputValue] = useState('');
-    const [suggestions, setSuggestions] = useState<SearchResult[]>([
-      { id: 1, name: 'Apple' },
-      { id: 2, name: 'Banana' },
-      { id: 3, name: 'Orange' },
-      { id: 4, name: 'Mango' },
-      { id: 5, name: 'Pineapple' },
-      { id: 6, name: 'Grapes' },
-      { id: 7, name: 'Strawberry' },
-      { id: 8, name: 'Blueberry' },
-      { id: 9, name: 'Watermelon' },
-      { id: 10, name: 'Cherry' },
-    ]);
+    const [suggestions, setSuggestions] = useState<Product[]>([]);
+
+    const { addToShoppingList, removeFromFavorites, addToFavorites, favorites } = useShoppingList();
   
+    const getProducts = async () => {
+      try {
+        const response = await axios.get(`https://dummyjson.com/products`);
+        setSuggestions(response.data.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+
     const updateSuggestions = (inputValue: string) => {
       if (inputValue.trim() === '') {
         return [];
       }
   
       const filteredSuggestions = suggestions.filter(suggestion =>
-        suggestion.name.toLowerCase().includes(inputValue.toLowerCase())
+        suggestion.title.toLowerCase().includes(inputValue.toLowerCase())
       );
       return filteredSuggestions.slice(0, 3); // Limit suggestions to 3 items
     };
@@ -72,13 +113,42 @@ interface SearchResult {
       const newInputValue = event.target.value;
       setInputValue(newInputValue);
     };
+
+    const isFavorite = (product:Product)=>{
+      if(favorites.some(item=>item.id === product.id)){
+        return true;
+      }
+      return false;
+    }
   
-    const handleSuggestionClick = (suggestion: SearchResult) => {
-      setInputValue(suggestion.name);
-      setSuggestions([]);
-    };
-  
+    const handleFavorite=( product:Product)=>{
+      if(isFavorite(product)){
+        return (event: React.MouseEvent) => {
+          removeFromFavorites(product)
+          event.preventDefault();
+        }
+      }
+      else{
+        return (event: React.MouseEvent) => {
+          addToFavorites(product)
+          event.preventDefault();
+        }
+      }
+    }
+
+    const addtoShoppingClick = (product: Product) => {
+      return (event: React.MouseEvent) => {
+        addToShoppingList(product)
+        event.preventDefault();
+      }
+    }
+
+
     const filteredSuggestions = updateSuggestions(inputValue);
+
+    useEffect(() => {
+      getProducts()
+    }, []);
   
     return (
       <Container>
@@ -89,16 +159,15 @@ interface SearchResult {
           placeholder="Search..."
         />
         {filteredSuggestions.length > 0 && inputValue.trim() !== '' && (
-          <ul className="suggestion-list">
+          <SuggestionList>
             {filteredSuggestions.map(suggestion => (
-              <li
+                <SuggestionListLi
                 key={suggestion.id}
-                onClick={() => handleSuggestionClick(suggestion)}
-              >
-                {suggestion.name}
-              </li>
+                >
+                    <ProductCard product={suggestion} isFavorite={isFavorite} handleFavorite={handleFavorite} addtoShoppingClick={addtoShoppingClick}/>
+               </SuggestionListLi>
             ))}
-          </ul>
+          </SuggestionList>
         )}
         <AddButton>Add New Product</AddButton>
       </Container>

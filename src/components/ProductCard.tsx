@@ -125,7 +125,7 @@ export default function ProductCard({product,handleFavorite,isFavorite,addtoShop
     return (<>
     <ListItemContainer key={product.id}>
       <ImageContainer>
-        <img src={product.thumbnail} style={{maxHeight:"120px", maxWidth: "120px", borderRadius: "10px" }} alt="image" />
+        <img src={product.thumbnail} style={{maxHeight:"120px", maxWidth: "120px", minWidth: "120px", borderRadius: "10px" }} alt="image" />
       </ImageContainer>
       <CardGroup>
         <ProductHeading>
