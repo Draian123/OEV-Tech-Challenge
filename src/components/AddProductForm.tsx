@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import { styled } from "styled-components";
-
-
-const FormContainer = styled.form`
-    width: 580px;
-    height: 500px;
-    max-height: 150px;
-    position: absolute;
-`;
+// import { styled } from "styled-components";
 
 
 interface FormData {
@@ -58,40 +50,42 @@ const AddProductFrom: React.FC = () => {
   };
 
   return (
-    <div>
-        <div>
-          <div>Create product</div>
-          <div>
+    <div className="container">
+        <div className='rowContainer'>
+          <div className='inlineBlock'>Create product</div>
+          <div className='inlineBlock'>
             X
           </div>
         </div>
-        <FormContainer onSubmit={handleSubmit}>
+        <form className='.rowContainer' onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="image">Image:</label>
-              <input type="file" id="image" name="image" onChange={handleImageChange} />
+              <input type="file" id="image" name="image" placeholder='Image' onChange={handleImageChange} />
           </div>
           <br />
           
           <div>
-            <label htmlFor="title">Title:</label>
-            <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} />
-            <br />
+            <div>
+              <input type="text" id="title" name="title" placeholder='Title' value={formData.title} onChange={handleInputChange} />
+            </div>
 
-            <label htmlFor="price">Price:</label>
-            <input type="number" id="price" name="price" value={formData.price} onChange={handleInputChange} />
-            <br />
+            <div>
+              <input type="number" id="price" name="price" value={formData.price} onChange={handleInputChange} />
+            </div>
 
-            <label htmlFor="description">Description:</label>
-            <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} />
-            <br />
+            <div className="description" >
+              <textarea placeholder='description' id="description" name="description" value={formData.description} onChange={handleInputChange} />
+            </div>
 
-            <label htmlFor="favorite">Favorite:</label>
-            <input type="checkbox" id="favorite" name="favorite" checked={formData.favorite} onChange={handleInputChange} />
-            <br />
-
-            <input type="submit" value="Submit" />
+            <div>
+              <label htmlFor="favorite">Favorite:</label>
+              <input type="checkbox" id="favorite" name="favorite" checked={formData.favorite} onChange={handleInputChange} />
+            </div>
+            
+            <div className='submitButtonContainer '>
+              <input className='submitButton' type="submit" value="Add new product"  />
+            </div>
           </div>
-        </FormContainer>
+        </form>
     </div>
   );
 };

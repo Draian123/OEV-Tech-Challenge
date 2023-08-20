@@ -19,6 +19,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   margin: 10px;
+  position: relative;
 `;
 
 const SearchInput = styled.input`
