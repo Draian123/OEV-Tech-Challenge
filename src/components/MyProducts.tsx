@@ -106,6 +106,7 @@ const ConfirmOrderButton = styled.div`
     border: none;
     border-radius: 20px;
     transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
 
     &:hover{
       background-color: #f5f5f5;

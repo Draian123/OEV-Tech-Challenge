@@ -7,6 +7,7 @@ import { styled } from "styled-components";
 import axios from "axios";
 import ProductCard from "./ProductCard";
 import { useShoppingList } from "./ShoppingListContext";
+import AddProductFrom from "./AddProductForm";
 
 
 
@@ -83,6 +84,7 @@ interface Product {
   
   
   const SearchBar: React.FC = () => {
+    const [showForm, setShowForm] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [suggestions, setSuggestions] = useState<Product[]>([]);
 
@@ -114,6 +116,7 @@ interface Product {
       setInputValue(newInputValue);
     };
 
+    //Do Not Reaped yourself btw
     const isFavorite = (product:Product)=>{
       if(favorites.some(item=>item.id === product.id)){
         return true;
@@ -169,7 +172,16 @@ interface Product {
             ))}
           </SuggestionList>
         )}
-        <AddButton>Add New Product</AddButton>
+        <AddButton onClick={() => {
+          if(showForm){
+            setShowForm(false)
+            return
+          }else{
+            setShowForm(true)
+            return
+          }
+        }}>Add New Product</AddButton>
+        {showForm&& <AddProductFrom/>}
       </Container>
     );
   };
